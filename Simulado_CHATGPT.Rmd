@@ -1,0 +1,110 @@
+---
+title: "Raiz_Unitária"
+author: "Camily Nunes dos Santos"
+date: "2024-10-22"
+output: html_document
+---
+  
+  Podemos começar com o Teste de Raiz Unitária (ADF). Vamos usar o pacote tseries no R para aplicar o teste Augmented Dickey-Fuller (ADF) a uma série temporal. Aqui está um exemplo para iniciarmos:
+
+1. Raiz Unitária e Tendência: Teste ADF
+
+# Instalar e carregar pacotes necessários
+```{r}
+install.packages("tseries")
+library(tseries)
+```
+
+
+# Criar uma série temporal de exemplo (simulada)
+```{r}
+set.seed(123)
+```
+
+```{r}
+serie_exemplo <- cumsum(rnorm(100))  # Série com tendência (não estacionária)
+```
+
+
+# Realizar o Teste ADF para verificar a presença de raiz unitária  
+Teste ADF (Augmented Dickey-Fuller): Verifica se a série contém uma raiz unitária, ou seja, se é não estacionária. A hipótese nula (H0) é que a série contém uma raiz unitária (não estacionária), e a hipótese alternativa (H1) é que a série é estacionária. Se o p-valor do teste for baixo (geralmente menor que 0,05), rejeitamos H0, indicando que a série é estacionária.  
+  
+```{r}
+resultado_adf <- adf.test(serie_exemplo)
+```
+
+
+# Exibir resultado
+```{r}
+print(resultado_adf) 
+```
+ 
+
+Esse código simula uma série com uma tendência (não estacionária) e aplica o teste ADF para verificar se há raiz unitária, ou seja, se a série é não estacionária.
+
+
+# gráfio_agora  
+  
+# Instalar e carregar pacotes
+```{r}
+install.packages("ggplot2")
+library(ggplot2)
+```
+
+
+# Criar séries temporais
+```{r}
+set.seed(123)
+n <- 100
+serie_nao_estacionaria <- cumsum(rnorm(n))  # Série não estacionária (com tendência)
+serie_estacionaria <- rnorm(n)              # Série estacionária (sem tendência)
+```
+
+
+# Combinar as séries em um data frame para visualização
+```{r}
+tempo <- 1:n
+df <- data.frame(tempo, serie_nao_estacionaria, serie_estacionaria)
+```
+
+
+# Plotar as séries
+```{r}
+ggplot(df, aes(x = tempo)) +
+  geom_line(aes(y = serie_nao_estacionaria, color = "Não Estacionária")) +
+  geom_line(aes(y = serie_estacionaria, color = "Estacionária")) +
+  labs(title = "Comparação de Séries Temporais: Estacionária vs Não Estacionária",
+       y = "Valor", x = "Tempo") +
+  scale_color_manual("", 
+                     breaks = c("Não Estacionária", "Estacionária"),
+                     values = c("red", "blue")) +
+  theme_minimal()
+```
+
+Para interpretar os resultados do teste ADF, precisamos olhar para três componentes principais que são fornecidos pelo adf.test():
+
+Estatística do teste: Um valor que mede o quão forte a evidência é contra a hipótese nula.
+p-valor: Um valor que indica a probabilidade de observar a estatística do teste, ou algo mais extremo, se a hipótese nula for verdadeira.
+Valores críticos: Limites para diferentes níveis de significância (geralmente 1%, 5% e 10%) que ajudam a determinar se a estatística do teste é suficientemente extrema para rejeitar a hipótese nula.
+Interpretação do Resultado
+Hipótese Nula (H0): A série contém uma raiz unitária (ou seja, a série é não estacionária).
+Hipótese Alternativa (H1): A série não contém uma raiz unitária (ou seja, a série é estacionária).
+Passos de Interpretação
+Verificar o p-valor:
+
+Se o p-valor for menor que 0,05 (ou o nível de significância que você está utilizando), você rejeita a hipótese nula.
+Se o p-valor for maior que 0,05, você não rejeita a hipótese nula.
+Comparar a estatística do teste com os valores críticos:
+
+Se a estatística do teste for menor que o valor crítico correspondente ao nível de significância escolhido, você não rejeita H0.
+Se a estatística do teste for maior que o valor crítico, você rejeita H0.
+Conclusão
+Se você rejeitar H0: Conclui-se que a série temporal é estacionária. Isso significa que suas propriedades estatísticas (como média e variância) não mudam ao longo do tempo.
+Se você não rejeitar H0: Conclui-se que a série temporal é não estacionária, sugerindo que a média e/ou variância da série mudam ao longo do tempo, indicando que pode ser necessário aplicar transformações (como diferenciação) para torná-la estacionária.
+Exemplo
+Se, por exemplo, o resultado do teste ADF for algo como:
+
+Estatística do teste: -2.45
+p-valor: 0.012
+Valores críticos (1%, 5%, 10%): -3.50, -2.89, -2.58
+Aqui, você rejeitaria a hipótese nula (porque 0.012 < 0.05) e concluiria que a série é estacionária.  

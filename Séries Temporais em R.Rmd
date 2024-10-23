@@ -84,12 +84,30 @@ Testei com: PIB Total - variação % sobre o mesmo período do ano anterior - M�
 ```{r}  
 #código sugerido pelo material
 pib <- ts(read.delim("pib.csv", dec = ","), 
-           start = 1991, freq = 4)
+           start = 1991, freq = 4)  
+#continua...
 ```
 
   
-```{r}
+```{r} 
+#banco_treino
 pib <- read.csv("C:/Users/camir/OneDrive - Universidade Federal de Rondonópolis/Eco_Series_Temporais/Dados/Banco Central/pib.csv", sep = ",", header = TRUE, skip = 1)
 ```
   
   
+```{r}
+#continuação
+pib <- pib [, -1]
+```
+
+```{r}
+plot(pib, main = 'PIB brasileiro ', 
+     ylab = 'Indice', xlab = 'Ano', 
+     bty = '1', col = 'red', lty = 1)
+```
+
+```{r}
+grid (col = 'darkgrey',
+      lwd = 2)
+```
+

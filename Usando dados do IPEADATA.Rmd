@@ -1,0 +1,95 @@
+---
+title: "Séries Temporais em R"
+author: "Camily Nunes dos Santos"
+---
+
+Atividades realizadas tiradas do Material Séries Temporais em R de Ricardo Lima†. [<https://analisemacro.com.br/wp-content/uploads/2015/02/CursoCompleto.pdf>]
+
+#Objetivo Final: é fazer inferências sobre e tentar descrever o futuro desenvolvimento da variável de interesse.
+
+#Exercício 1
+
+vamos começar com um banco de dados disponível no próprio R no pacote pwt8.
+
+```{r}
+install.packages("pwt8")
+```
+
+```{r}
+library(pwt8) #Carregando os dados do pacote
+```
+
+```{r}
+data("pwt8.0") # Carregando os dados do pacote
+```
+
+# Variáveis escolhidas são:
+
+# Pib real
+
+# Média de horas trabalhadas
+
+# Taxa de c\^ambio
+
+```{r}
+br <-subset (pwt8.0, country =="Brazil",
+             select = c (rgdpna, avh, xr))
+```
+
+```{r}
+br$prod <- br$rgdpna/br$avh
+```
+
+```{r}
+write.table(br, file='dados.txt')
+```
+
+```{r}
+dados <- read.table ('dados.txt')
+```
+
+```{r}
+dados <- ts(dados, start = 1950, freq = 1)
+```
+
+Aqui o comando ts está avisando ao R que a matriz dados possui séries temporais que se iniciam em 1950 com frequência 1, ou seja, são dados anuais. Frequência 4 e 12 seriam, respectivamente, dados trimestrais e mensais.
+
+or
+
+```{r}
+#Show in New Window (Erro: ',' inesperado em "dados <- ts(read.table('dados.txt'), start = 1950),")
+dados <- ts(read.table('dados.txt'), start = 1950), freq = 1)
+```
+
+```{r}
+plot (dados)
+```
+
+#aprimorando gráfico
+
+```{r}
+plot (dados, 
+      col = 'blue',
+      main = 'Dados Brasileiros',
+      xlab = 'Ano')
+```
+
+# Exercício 2
+
+Usaremos o PIB trimestral (série 1232 do SGS do Banco Central do Brasil)  
+  
+Testei com: PIB Total - variação % sobre o mesmo período do ano anterior - Média - Período de 23/09/2024 a 23/10/2024 - Base: Expectativas informadas nos últimos 30 dias
+
+
+```{r}  
+#código sugerido pelo material
+pib <- ts(read.delim("pib.csv", dec = ","), 
+           start = 1991, freq = 4)
+```
+
+  
+```{r}
+pib <- read.csv("C:/Users/camir/OneDrive - Universidade Federal de Rondonópolis/Eco_Series_Temporais/Dados/Banco Central/pib.csv", sep = ",", header = TRUE, skip = 1)
+```
+  
+  

@@ -47,7 +47,22 @@ write.table(br, file='dados.txt')
 ```{r}
 dados <- read.table ('dados.txt')
 ```
+  
+```{r}  
+#Neste comando, está sendo criada uma **série temporal** no R, com os seguintes parâmetros:
 
+#`pib_dados` é o objeto que armazenará a série temporal.
+# `ts()` é a função que converte o vetor ou conjunto de dados (`pib`) em uma série temporal.
+# `start = 2022` define o **ano de início** da série como 2022.
+# `freq = 1` define a **frequência** dos dados, indicando que as observações são anuais. A frequência "1" significa que há uma observação por ano.
+
+### Explicação do Código:
+#Esse comando, portanto, está criando uma série temporal anual que começa em 2022, onde os dados de `pib` são organizados ao longo do tempo com uma frequência de uma observação por ano.  
+
+pib_dados <- ts(pib, start = 2022, freq = 1)
+```
+    
+  
 ```{r}
 dados <- ts(dados, start = 1950, freq = 1)
 ```
@@ -60,7 +75,9 @@ or
 #Show in New Window (Erro: ',' inesperado em "dados <- ts(read.table('dados.txt'), start = 1950),")
 dados <- ts(read.table('dados.txt'), start = 1950), freq = 1)
 ```
-
+  
+plot(pib_dados)   
+    
 ```{r}
 plot (dados)
 ```
@@ -94,6 +111,10 @@ pib <- ts(read.delim("pib.csv", dec = ","),
 pib <- read.csv("C:/Users/camir/OneDrive - Universidade Federal de Rondonópolis/Eco_Series_Temporais/Dados/Banco Central/pib.csv", sep = ",", header = TRUE, skip = 1)
 ```
   
+```{r}
+pib <- read.csv("https://github.com/CamilyNunes/Eco_Series_Temporais/raw/refs/heads/main/Dados/Ipea_Data/ipeadata%5B30-10-2024-03-45%5D.csv", sep = ";", header = TRUE, skip = 1)
+```
+  
   
 ```{r}
 #continuação
@@ -101,7 +122,7 @@ pib <- pib [, -1]
 ```
 
 ```{r}
-plot(pib, main = 'PIB brasileiro ', 
+plot(pib, main = 'PIB brasileiro', 
      ylab = 'Indice', xlab = 'Ano', 
      bty = '1', col = 'red', lty = 1)
 ```
@@ -109,5 +130,23 @@ plot(pib, main = 'PIB brasileiro ',
 ```{r}
 grid (col = 'darkgrey',
       lwd = 2)
+```
+  
+ Agoradevemosrodararegressão,paraissodevemoscriarosdummies sazonais.  
+   
+```{r}
+ Q <- ordered(cycle(pib))
+```
+     
+     
+```{r}
+  
+ 
+ pib.reg <-lm(pib~Q)
+```
+
+ Utilizandoocomandosummarypodemosobterumresumodaregressão.
+```{r}
+summary(pib.reg)
 ```
 

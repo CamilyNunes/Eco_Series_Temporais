@@ -149,4 +149,68 @@ grid (col = 'darkgrey',
 ```{r}
 summary(pib.reg)
 ```
+  
+    
+ 3.1.2 Tendência de longo prazo  
+   
+   Assumindo agora que nós temos dados anuais podemos rodar a seguinte regressão:  
+   
+                               PIBt = + Anot+ t  
+                                 
+Resolução:    
 
+1. caso da sazonalidade;
+2. Se for estatisticamente != de zero podemos concluir que a série em questão não possui uma tendência linear. 
+3.  Se o valor de t for estatisticamente signicativo (+10%) a série t representará PIBt removido de sua tendência linear. 
+  
+  Antes iremos importar os dados, avisar ao R que se trata de séries de tempo;
+  Note que para issobprecisamos criar um vetor representando atendência linear (por exemplo uma sequência de 1962 até 2013,ou simples mentede 1 até 52).  
+    
+1. Como sempre começamos importando os dados e, em seguida, visualizando eles
+```{r}
+pib <- ts(read.delim("https://github.com/CamilyNunes/Eco_Series_Temporais/raw/refs/heads/main/Dados/Ipea_Data/bcdata.sgs.1207.csv", dec=";"),
+          start=1991, freq=4)
+```
+  
+```{r}  
+#não entendi
+pib <- pib[,-1]
+```
+   
+```{r}
+plot(pib,main='PIBbrasileiro',
+     ylab='Indice',xlab = 'Ano',
+     bty='l',col='red',lty=1)
+```
+  
+```{r}
+grid(col='darkgrey',
+     lwd=2)
+```
+```{r}
+#teste para resolver provlema:  
+# Primeiro, crie o gráfico
+plot(pib_dados, main = "PIB ao longo do tempo", col = "blue")
+
+# Depois, adicione a grade
+grid(col = "darkgrey", lwd = 2)
+```
+      
+      
+2.  Agoradevemosrodararegressão,paraissodevemoscriarosdummies sazonais.  
+  
+```{r}
+Q <- ordered(cycle(pib))
+
+pib.reg <-lm(pib~Q)
+```
+  
+3.  Utilizandoocomandosummarypodemosobterumresumodaregressão.  
+  
+```{r}
+ summary(pib.reg)
+```
+ 4. será então necessário remover a parte quadrática da tendência   
+   
+   
+    

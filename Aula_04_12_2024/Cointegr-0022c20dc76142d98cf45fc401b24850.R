@@ -1,9 +1,9 @@
 # Pacotes instalados: roda uma vez somente e deixa como comentário
-
-#install.packages("readxl")
-#install.packages("aTSA")
-#install.packages("lmtest")
-#install.packages("strucchange")
+install.packages("sandwich")
+install.packages("readxl")
+install.packages("aTSA")
+install.packages("lmtest")
+install.packages("strucchange")
 
 # Carregar os pacotes toda vez que for rodar
 library(readxl) # Para abrir a planilha em excel

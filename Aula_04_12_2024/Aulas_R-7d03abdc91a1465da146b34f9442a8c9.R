@@ -1,14 +1,15 @@
 # Pacotes instalados: roda uma vez somente e deixa como comentário
 
-#install.packages("UsingR")
-#install.packages("fpp")
-#install.packages("mFilter")
-#install.packages("readxl")
-#install.packages("seasonal")
-#install.packages("urca")
-#install.packages("FinTS")
-#install.packages("tsoutliers") 
-#install.packages("forecast")
+install.packages("UsingR")
+install.packages("fpp")
+install.packages("mFilter")
+install.packages("readxl")
+install.packages("seasonal")
+install.packages("urca")
+install.packages("FinTS")
+install.packages("tsoutliers") 
+install.packages("forecast")
+
 
 
 # Carregar os pacotes toda vez que for rodar
@@ -98,12 +99,12 @@ ts.plot(elecequip, filtro_hp$trend)
 #Baixando uma planilha do excel
 
 setwd("C:/Juliano/Universidade/Disciplinas/Series Temporais")
-
+setwd("C:/Users/camir/OneDrive - Universidade Federal de Rondonópolis/Eco_Series_Temporais/Aula_04_12_2024")
 Dados <- read_excel("C:/Juliano/Universidade/Disciplinas/Series Temporais/PIB_Mensal.xlsx")
 
 
 # Criando as séries temporais
-PIB = ts(Dados$PIB[1:354], start= c(1995, 2), freq=12)
+PIB<-  ts(Dados$PIB[1:354], start= c(1995, 2), freq=12)
 
 
 ts.plot(PIB)
@@ -113,7 +114,6 @@ summary(PIB) # Algumas estatísticas básicas
 sd(PIB) # Desvio-padrão
 
 # Vamos verificar se existe sazonalidade na série do PIB
-
 decomp_PIB<-decompose(PIB, type='additive')
 plot(decomp_PIB)
 
@@ -204,13 +204,13 @@ for (j in 1:(354)){
   Tempo[j]=j
 }
 
-regPIB_Tempo <- lm(ln_PIB_AS ~ Tempo)
-summary(regPIB_Tempo)
+reg_PIB_Tempo <- lm(ln_PIB_AS ~ Tempo)
+summary(reg_PIB_Tempo)
 #Coefficients:
 #             Estimate Std. Error t value Pr(>|t|)    
 #(Intercept) 1.107e+01  1.027e-02  1078.1   <2e-16 ***
 #Tempo       8.001e-03  5.012e-05   159.6   <2e-16 ***
-ln_PIB_AS_ST <- regPIB_Tempo$residuals # ST significa sem tendência
+ln_PIB_AS_ST <- reg_PIB_Tempo$residuals # ST significa sem tendência
 ts.plot(ln_PIB_AS_ST)
 # Parece que não é uma série te tendência estacionária.
 summary(ur.df(ln_PIB_AS_ST, type="trend", lags=8, selectlags = "AIC"))
@@ -219,6 +219,7 @@ summary(ur.df(ln_PIB_AS_ST, type="trend", lags=8, selectlags = "AIC"))
 ##################### Verificando se é de ou diferença estacionária (DE)
 
 # Estraindo a primeira diferença, temos:
+#é a terceira modificação que ocorre na serie
 d_ln_PIB_AS <- diff(ln_PIB_AS) # O comando diff() é para extrair a primeira diferença (Yt - Yt-1)
 ts.plot(d_ln_PIB_AS)
 # Parece estacionária hein!!!
@@ -233,7 +234,7 @@ summary(ur.kpss(d_ln_PIB_AS, type = "tau", lags = "long"))
 # Value of test-statistic is: 0.0782. H0 é a estacionariedade. Não rejeita a estacionariedade!
 # CONCLUSÃO: ln_PIB_SA é uma série de diferença estacionária (DE)
 
-
+#h0 = raiz unitária- se rejeita h0 não é estacionaria
 ######################### Previsão com modelo ARIMA
 
 # Vamos fazer uma previsão com o PIB

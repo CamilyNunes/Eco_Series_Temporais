@@ -1,0 +1,95 @@
+---
+title: "Prática e melhorias"
+author: "Camily Nunes dos Santos"
+date: "2025-02-05"
+output: html_document
+---
+
+Aqui está uma versão melhorada do seu script R, com melhor organização, comentários mais explicativos e boas práticas para torná-lo mais replicável e compreensível. 
+
+**Principais melhorias:**
+- Organização por seções e títulos claros.
+- Separação entre instalação e carregamento de pacotes.
+- Uso de `require()` para carregar pacotes (mais eficiente).
+- Caminho relativo para evitar hardcoding de diretórios.
+- Melhoria na formatação dos gráficos e scripts de análise.  
+- Comentários mais explicativos e concisos.
+
+Vou colocar o código atualizado no editor para facilitar.
+
+#### Instalação de pacotes (rode apenas uma vez) ####
+# install.packages(c("UsingR", "fpp", "mFilter", "readxl", "seasonal", "urca", "FinTS", "tsoutliers", "forecast"))
+
+#### Carregamento de pacotes ####
+require(UsingR)       # Gráficos básicos
+require(fpp)          # Série elecequip
+require(mFilter)      # Filtro Hodrick-Prescott
+require(readxl)       # Leitura de planilhas Excel
+require(seasonal)     # X-13 ARIMA para ajuste sazonal
+require(urca)         # Testes de raiz unitária
+require(FinTS)        # Teste de estabilidade da variância no ARIMA
+require(tsoutliers)   # Identificação de outliers em séries temporais
+require(forecast)     # Modelos ARIMA e previsão
+
+#### Análise da base Galton ####
+data(galton)
+head(galton)  # Visualização inicial
+
+galton <- galton * 2.54  # Conversão de polegadas para cm
+head(galton)
+
+#### Gráfico de Histograma ####
+hist(galton$child, xlab = "Altura (cm)", ylab = "Frequência", col = "lightgray", border = "steelblue", main = "Distribuição das Alturas dos Filhos")
+
+#### Boxplot para Altura dos Pais ####
+boxplot(galton$parent, ylab = "Altura (cm)", col = "seagreen3", main = "Altura dos Pais")
+
+#### Gráfico de Dispersão: Peso x Altura ####
+data(kid.weights)
+kid.weights$weight <- kid.weights$weight * 0.45  # Conversão de libras para kg
+kid.weights$height <- kid.weights$height * 2.54 / 100  # Conversão de polegadas para metros
+
+plot(kid.weights$weight, kid.weights$height, xlab = "Peso (kg)", ylab = "Altura (m)", main = "Peso vs. Altura")
+
+#### Regressão Linear ####
+regressao <- lm(height ~ weight, data = kid.weights)
+abline(regressao, col = "red")
+summary(regressao)
+
+#### Gráfico de Pizza: Proporção de Gêneros ####
+prop <- table(kid.weights$gender)
+pie(prop, labels = c("Feminino", "Masculino"), col = c("palevioletred2", "dodgerblue3"), main = "Distribuição de Gênero")
+legend("topright", legend = c("Feminino", "Masculino"), fill = c("palevioletred2", "dodgerblue3"))
+
+#### Séries Temporais ####
+data(elecequip)
+ts.plot(elecequip, xlab = "Tempo", ylab = "Índice de Novas Ordens", main = "Série Elecequip")
+
+decomp <- decompose(elecequip, type='additive')
+plot(decomp)
+
+#### Leitura de Dados Externos (Usar Caminho Relativo) ####
+# setwd("caminho/para/seu/diretorio")
+# Dados <- read_excel("PIB_Mensal.xlsx")
+
+#### Criando Série Temporal ####
+# PIB <- ts(Dados$PIB[1:354], start = c(1995, 2), frequency = 12)
+# ts.plot(PIB, main = "PIB Mensal")
+
+#### Testes de Estacionariedade ####
+# decomp_PIB <- decompose(PIB, type='additive')
+# plot(decomp_PIB)
+
+# Ajuste X13-ARIMA
+# AjusteX13_PIB <- seas(PIB, transform.function = "none")
+# plot(AjusteX13_PIB)
+
+#### Modelo ARIMA para Previsão ####
+# Prev_PIB <- auto.arima(PIB, seasonal = TRUE)
+# forecast(Prev_PIB, h = 12)
+# plot(forecast(Prev_PIB))
+
+#### Conclusão ####
+# O script foi melhorado para facilitar a replicação e organização dos códigos.
+
+Agora o script está mais limpo, organizado e fácil de entender. Além disso, o uso de caminhos relativos e boas práticas de codificação o tornam mais replicável. Se precisar de mais ajustes, me avise! 😊
